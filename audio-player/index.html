@@ -1,0 +1,41 @@
+<title>Music Player</title>
+<audio controls id="player">Not supported</audio>
+<input type="button" id="prev" value="«">
+<input type="button" id="next" value="»">
+<br>
+<input type="file" multiple accept="audio/*" id="files">
+<script>
+	var player = document.querySelector('#player');
+    var files = document.querySelector('#files');
+    var prev = document.querySelector('#prev');
+    var next = document.querySelector('#next');
+    var tracks = [];
+    var trackId = 0;
+    
+    function read(i) {
+    	var fr = new FileReader();
+        fr.onload = function(){
+            tracks.push(fr.result);
+            player.src = tracks[0];
+        }
+        fr.readAsDataURL(files.files[i]);
+    }
+    files.addEventListener('change',function(e){
+    	tracks = [];
+        for(var i = 0;i < e.target.files.length; i++){
+        	read(i);
+        }
+    });
+    next.addEventListener('click',function(){
+    	if(trackId < tracks.length - 1){
+        	trackId += 1;
+        	player.src = tracks[trackId];
+        }
+    });
+    prev.addEventListener('click',function(){
+    	if(trackId > 0){
+        	trackId -= 1;
+        	player.src = tracks[trackId];
+        }
+    });
+</script>
