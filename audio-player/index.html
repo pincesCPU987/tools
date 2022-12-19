@@ -2,7 +2,7 @@
 <audio autoplay controls id="player">Not supported</audio>
 <input type="button" id="prev" value="«">
 <input type="button" id="next" value="»">
-<input type="button" id="rand" value="In Order (click to randomize)" onclick="rand = !rand;this.innerHTML = rand ? 'Random (click to play in order)' : 'In Order (click to randomize)';">
+<input type="button" id="rand" value="In Order (click to randomize)" onclick="rand = !rand;this.value = (rand ? 'Random (click to play in order)' : 'In Order (click to randomize)');">
 <br>
 <input type="file" multiple accept="audio/*" id="files">
 <p id="display">Nothing uploaded</p>
@@ -16,6 +16,7 @@
 	var tracks = [];
 	var names = [];
     var trackId = 0;
+    var oldId = 0;
     var loadId = 0;
     function read(i,e) {
     	var fr = new FileReader();
@@ -40,11 +41,14 @@
     next.addEventListener('click',function(){
     	if(!rand){
             if(trackId < tracks.length - 1){
+            	oldId = trackId;
                 trackId += 1;
                 player.src = tracks[trackId];
             }
         } else {
+            oldId = trackId;
             trackId = Math.floor(Math.random() * tracks.length);
+            player.src = tracks[trackId];
         }
     });
     prev.addEventListener('click',function(){
@@ -54,7 +58,8 @@
                 player.src = tracks[trackId];
             }
         } else {
-            trackId = Math.floor(Math.random() * tracks.length);
+            trackId = oldId;
+            player.src = tracks[trackId];
         }
     });
 </script>
